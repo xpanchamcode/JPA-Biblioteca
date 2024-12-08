@@ -10,6 +10,7 @@ import java.util.Set;
 @Table(name = "usuario")
 public class Usuario {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -88,7 +89,12 @@ public class Usuario {
     }
 
     public void setTipo(String tipo) {
-        this.tipo = tipo;
+        if(tipo!=null && !tipo.isEmpty()){
+            if(tipo.equals("normal") || tipo.equals("administrador")) {
+                this.tipo = tipo;
+            }
+        }
+        throw new IllegalArgumentException("Tipo de usuario inválido.");
     }
 
     public LocalDate getPenalizacionHasta() {
@@ -99,4 +105,29 @@ public class Usuario {
         this.penalizacionHasta = penalizacionHasta;
     }
 
+    public Usuario() {
+    }
+
+    public Usuario(String dni, String nombre, String email, String password, String tipo) {
+        this.dni = dni;
+        this.nombre = nombre;
+        this.email = email;
+        this.password = password;
+        setTipo(tipo);
+        this.penalizacionHasta = null;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", dni='" + dni + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", tipo='" + tipo + '\'' +
+                ", penalizacionHasta=" + penalizacionHasta +
+                ", prestamos=" + prestamos +
+                '}';
+    }
 }

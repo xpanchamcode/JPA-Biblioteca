@@ -12,13 +12,14 @@ import java.util.Set;
 @Table(name = "ejemplar")
 public class Ejemplar {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "isbn", nullable = false)
-    private biblioteca.Libro isbn;
+    private Libro isbn;
 
     @ColumnDefault("'Disponible'")
     @Lob
@@ -44,11 +45,11 @@ public class Ejemplar {
         this.id = id;
     }
 
-    public biblioteca.Libro getIsbn() {
+    public Libro getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(biblioteca.Libro isbn) {
+    public void setIsbn(Libro isbn) {
         this.isbn = isbn;
     }
 
@@ -57,7 +58,20 @@ public class Ejemplar {
     }
 
     public void setEstado(String estado) {
-        this.estado = estado;
+        if(estado!=null && !estado.isEmpty()){
+            if(estado.equalsIgnoreCase("Disponible") || estado.equalsIgnoreCase("Prestado") || estado.equalsIgnoreCase("Dañado")) {
+                this.estado = estado;
+            }
+        }
+        throw new IllegalArgumentException("Estado de ejemplar inválido.");
+    }
+
+    public Ejemplar() {
+    }
+
+    public Ejemplar(Libro isbn, String estado) {
+        this.isbn = isbn;
+        setEstado(estado);
     }
 
 }

@@ -10,13 +10,14 @@ import java.time.LocalDate;
 @Table(name = "prestamo")
 public class Prestamo {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "usuario_id", nullable = false)
-    private biblioteca.Usuario usuario;
+    private Usuario usuario;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -37,11 +38,11 @@ public class Prestamo {
         this.id = id;
     }
 
-    public biblioteca.Usuario getUsuario() {
+    public Usuario getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(biblioteca.Usuario usuario) {
+    public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 
@@ -65,8 +66,28 @@ public class Prestamo {
         return fechaDevolucion;
     }
 
-    public void setFechaDevolucion(LocalDate fechaDevolucion) {
-        this.fechaDevolucion = fechaDevolucion;
+    public void setFechaDevolucion() {
+        this.fechaDevolucion = fechaDevolucion.plusDays(15);
     }
 
+    public Prestamo() {
+    }
+
+    public Prestamo(Usuario usuario, Ejemplar ejemplar, LocalDate fechaInicio) {
+        this.usuario = usuario;
+        this.ejemplar = ejemplar;
+        this.fechaInicio = fechaInicio;
+        setFechaDevolucion();
+    }
+
+    @Override
+    public String toString() {
+        return "Prestamo{" +
+                "id=" + id +
+                ", usuario=" + usuario.getDni() +
+                ", ejemplar=" + ejemplar.getId() +
+                ", fechaInicio=" + fechaInicio +
+                ", fechaDevolucion=" + fechaDevolucion +
+                '}';
+    }
 }
