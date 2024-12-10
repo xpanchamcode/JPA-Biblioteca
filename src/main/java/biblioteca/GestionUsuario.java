@@ -1,6 +1,7 @@
 package biblioteca;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -50,6 +51,32 @@ public class GestionUsuario {
             }
         }
         return adminExiste;
+    }
+
+    public static List<Prestamo> getPrestamosActivos(Usuario usuario){
+        List<Prestamo> listaPrestamosActivos = new ArrayList<>();
+        for (Prestamo prestamo : usuario.getPrestamos()) {
+            if(LocalDate.now().isBefore(prestamo.getFechaDevolucion()) || LocalDate.now().isEqual(prestamo.getFechaDevolucion())) {
+                listaPrestamosActivos.add(prestamo);
+            }
+        }
+        return listaPrestamosActivos;
+    }
+
+    public static boolean usuarioPenalizado(Usuario usuario){
+        if(usuario.getPenalizacionHasta()!=null && LocalDate.now().isBefore(usuario.getPenalizacionHasta()) || LocalDate.now().isEqual(usuario.getPenalizacionHasta())) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean prestamoDisponible(Usuario usuario){
+        if(!usuarioPenalizado(usuario)){
+            if(GestionUsuario.getPrestamosActivos(usuario).size()<=3){
+                return true;
+            }
+        }
+        return false;
     }
 }
 

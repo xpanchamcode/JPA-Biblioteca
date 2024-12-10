@@ -21,15 +21,35 @@ public class GestionPrestamo {
         listaPrestamos = listaNueva;
     }
 
-    public static boolean prestamoExists(int idEjemplar, Usuario usuario) {
+    public static boolean prestamoExists(int idPrestamo) {
         boolean existe = false;
-        Ejemplar ejemplarAdevolver = GestionEjemplar.getEjemplar(idEjemplar);
         for (Prestamo prestamo : listaPrestamos) {
-            if (prestamo.getEjemplar().equals(ejemplarAdevolver) && prestamo.getUsuario().equals(usuario)){
+            if (prestamo.getId().equals(idPrestamo)) {
                 existe = true;
             }
         }
         return existe;
+    }
+
+    public static boolean prestamoExists(int idEjemplar, Usuario usuario) {
+        boolean existe = false;
+        Ejemplar ejemplar = GestionEjemplar.getEjemplar(idEjemplar);
+        for (Prestamo prestamo : listaPrestamos) {
+            if (prestamo.getEjemplar().equals(ejemplar) && prestamo.getUsuario().equals(usuario)){
+                existe = true;
+            }
+        }
+        return existe;
+    }
+
+    public static Prestamo getPrestamo(int idPrestamo) {
+        Prestamo prestamoDevuelto = null;
+        for (Prestamo prestamo : listaPrestamos) {
+            if (prestamo.getId().equals(idPrestamo)) {
+                prestamoDevuelto = prestamo;
+            }
+        }
+        return prestamoDevuelto;
     }
 
     public static Prestamo getPrestamo(int idEjemplar, Usuario usuario) {
@@ -69,13 +89,8 @@ public class GestionPrestamo {
     }
 
     public static void devolverPrestamo(Prestamo prestamo, LocalDate fechaDevuelto) {
-        //Le quito un día para usar bien el isBefore, si son iguales dará false pero se ha devuelto en fecha así que debería dar true.
-        fechaDevuelto = fechaDevuelto.minusDays(1);
-        if(fechaDevuelto.isBefore(prestamo.getFechaDevolucion())) {
-            prestamo.getEjemplar().setEstado("Disponible");
-        }
-        else{
-            prestamo.getEjemplar().setEstado("Disponible");
+        prestamo.getEjemplar().setEstado("Disponible");
+        if(fechaDevuelto.isAfter(prestamo.getFechaDevolucion())) {
             //Las penalizaciones duran 15 días por cada libro prestado fuera de
             //plazo. Es decir, si como máximo un usuario ha devuelto fuera de
             //plazo 3 libros, la penalización será de 3*15=45 días.
@@ -85,13 +100,7 @@ public class GestionPrestamo {
             }
             else{
                 LocalDate penalizacionNueva = penalizacion.plusDays(15);
-                LocalDate penalizacionLimite = LocalDate.now().plusDays(45);
-                if(penalizacionNueva.isAfter(penalizacionLimite) || penalizacionNueva.isEqual(penalizacionLimite)) {
-                    prestamo.getUsuario().setPenalizacionHasta(penalizacionLimite);
-                }
-                else{
-                    prestamo.getUsuario().setPenalizacionHasta(penalizacionNueva);
-                }
+                prestamo.getUsuario().setPenalizacionHasta(penalizacionNueva);
             }
         }
     }

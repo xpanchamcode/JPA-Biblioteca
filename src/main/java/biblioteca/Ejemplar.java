@@ -74,4 +74,13 @@ public class Ejemplar {
         setEstado(estado);
     }
 
+    @Override
+    public String toString() {
+        return "Ejemplar{" +
+                "id=" + id +
+                ", isbn=" + isbn.getIsbn() +
+                ", estado='" + estado + '\'' +
+                ", prestamos=" + prestamos +
+                '}';
+    }
 }

@@ -73,10 +73,10 @@ public class Prestamo {
     public Prestamo() {
     }
 
-    public Prestamo(Usuario usuario, Ejemplar ejemplar, LocalDate fechaInicio) {
+    public Prestamo(Usuario usuario, Ejemplar ejemplar) {
         this.usuario = usuario;
         this.ejemplar = ejemplar;
-        this.fechaInicio = fechaInicio;
+        setFechaInicio(LocalDate.now());
         setFechaDevolucion();
     }
 
