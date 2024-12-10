@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d183cd11-089c-4e35-9ca1-873d0eafdd0a" name="Changes" comment="Commit menuUsuario y gestiones">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/biblioteca/Ejemplar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/biblioteca/Ejemplar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/biblioteca/GestionUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/biblioteca/GestionUsuario.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/biblioteca/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/biblioteca/Menu.java" afterDir="false" />
-    </list>
+    <list default="true" id="d183cd11-089c-4e35-9ca1-873d0eafdd0a" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -93,7 +88,7 @@
       <workItem from="1733398208626" duration="335000" />
       <workItem from="1733402000235" duration="2256000" />
       <workItem from="1733675979722" duration="5282000" />
-      <workItem from="1733815640441" duration="4324000" />
+      <workItem from="1733815640441" duration="6335000" />
     </task>
     <task id="LOCAL-00001" summary="Commit inicial">
       <option name="closed" value="true" />
@@ -119,7 +114,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733681282500</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Commit menús avanzados y lógica mejorada.">
+      <option name="closed" value="true" />
+      <created>1733822058091</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1733822058091</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -129,6 +132,7 @@
     <MESSAGE value="Commit inicial" />
     <MESSAGE value="Commit jpa entities y relations" />
     <MESSAGE value="Commit menuUsuario y gestiones" />
-    <option name="LAST_COMMIT_MESSAGE" value="Commit menuUsuario y gestiones" />
+    <MESSAGE value="Commit menús avanzados y lógica mejorada." />
+    <option name="LAST_COMMIT_MESSAGE" value="Commit menús avanzados y lógica mejorada." />
   </component>
 </project>

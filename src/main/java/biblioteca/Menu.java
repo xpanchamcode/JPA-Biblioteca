@@ -486,6 +486,8 @@ public class Menu {
                         if(GestionPrestamo.prestamoExists(idEjemplar, usuarioActual)){
                             Prestamo prestamoAdevolver = GestionPrestamo.getPrestamo(idEjemplar, usuarioActual);
                             GestionPrestamo.devolverPrestamo(prestamoAdevolver, LocalDate.now());
+                            //Sincronización a BD:
+                            DAOPrestamo.updateObjeto(prestamoAdevolver);
                         }
                     } else
                         System.out.println("No existe un libro con ese isbn.");

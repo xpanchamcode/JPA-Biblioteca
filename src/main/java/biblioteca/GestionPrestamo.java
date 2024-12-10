@@ -90,6 +90,8 @@ public class GestionPrestamo {
 
     public static void devolverPrestamo(Prestamo prestamo, LocalDate fechaDevuelto) {
         prestamo.getEjemplar().setEstado("Disponible");
+        //Sincronización a BD
+        Menu.DAOEjemplar.updateObjeto(prestamo.getEjemplar());
         if(fechaDevuelto.isAfter(prestamo.getFechaDevolucion())) {
             //Las penalizaciones duran 15 días por cada libro prestado fuera de
             //plazo. Es decir, si como máximo un usuario ha devuelto fuera de
@@ -102,6 +104,8 @@ public class GestionPrestamo {
                 LocalDate penalizacionNueva = penalizacion.plusDays(15);
                 prestamo.getUsuario().setPenalizacionHasta(penalizacionNueva);
             }
+            //Sincronización a BD
+            Menu.DAOUsuario.updateObjeto(prestamo.getUsuario());
         }
     }
 }
