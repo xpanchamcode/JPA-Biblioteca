@@ -52,4 +52,15 @@ public class GestionLibro {
         }
         return ejemplarDisponible;
     }
+
+    public static List<Ejemplar> getEjemplaresDisponibles(String isbn){
+        List<Ejemplar> ejemplaresDisponibles = new ArrayList<>();
+        Libro libroOriginal = GestionLibro.getLibro(isbn);
+        for (Ejemplar ejemplar : libroOriginal.getEjemplares()) {
+            if(ejemplar.getEstado().equals("Disponible")) {
+                ejemplaresDisponibles.add(ejemplar);
+            }
+        }
+        return ejemplaresDisponibles;
+    }
 }

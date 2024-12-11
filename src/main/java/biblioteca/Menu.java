@@ -31,8 +31,7 @@ public class Menu {
         Usuario usuarioActual = null;
         System.out.println("""
                     Inicia sesión:
-                    DNI: 
-                    """);
+                    DNI: """);
         String dni = t.nextLine();
         if(GestionUsuario.usuarioExists(dni)) {
             usuarioActual = GestionUsuario.getUsuario(dni);
@@ -48,11 +47,15 @@ public class Menu {
                     fallos++;
                     if(fallos==3) throw new IllegalArgumentException("Has llegado al límite de 3 intentos fallidos.");
                 }
-            } while (!acierto || fallos<3);
-            if(usuarioActual.getTipo().equals("administrador"))
+            } while (!acierto);
+            if(usuarioActual.getTipo().equals("administrador")) {
+                System.out.println("Bienvenido administrador.");
                 menuAdmin();
-            else
+            }
+            else {
+                System.out.println("Bienvenido usuario.");
                 menuUsuario(usuarioActual);
+            }
         }
         else{
             System.out.println("No existen usuarios con ese DNI.");
@@ -75,83 +78,7 @@ public class Menu {
                 case 1 -> menuLibro();
                 case 2 -> menuEjemplar();
                 case 3 -> menuUsuario();
-                case 4 -> { menuPrestamo();
-                    System.out.println("DNI del jugador a modificar:");
-                    String DNI = t.nextLine();
-                    if (GestionJugadores.jugadorExists(DNI)){ //Si se ha encontrado un jugador con ese DNI
-                        Jugador jugadorAupdatear = GestionJugadores.getJugador(DNI); //Creo un alias para el jugador
-                        //pido sus nuevos datos, los modifico en el objeto original con el alias y envío al método update
-                        System.out.println("Introduce los nuevos datos del jugador:");
-                        System.out.println("Nombre: ");
-                        String Nombre = t.nextLine();
-                        if(Nombre!=null&&!Nombre.isEmpty()) jugadorAupdatear.setNombre(Nombre);
-                        System.out.println("Fecha nacimiento (yyyy-MM-dd): ");
-                        String FechaNacimientoString = t.nextLine();
-                        if(FechaNacimientoString!=null&&!FechaNacimientoString.isEmpty()) {
-                            LocalDate FechaNacimiento = LocalDate.parse(FechaNacimientoString);
-                            jugadorAupdatear.setFechaNacimiento(FechaNacimiento);
-                        }
-                        System.out.println("Estatura (float): ");
-                        Float Estatura = t.nextFloat();
-                        if(Estatura!=null) jugadorAupdatear.setEstatura(Estatura);
-                        System.out.println("Peso (float): ");
-                        Float Peso = t.nextFloat();
-                        if(Peso!=null) jugadorAupdatear.setPeso(Peso);
-                        System.out.println("Número de goles: ");
-                        Integer numGoles = t.nextInt(); t.nextLine();
-                        if(numGoles!=null) jugadorAupdatear.setNGoles(numGoles);
-                        System.out.println("Número de asistencias: ");
-                        Integer numAsistencias = t.nextInt(); t.nextLine();
-                        if(numAsistencias!=null) jugadorAupdatear.setAsistencias(numAsistencias);
-                        System.out.println("Número de partidos jugados: ");
-                        Integer numPartidos = t.nextInt(); t.nextLine();
-                        if(numPartidos!=null) jugadorAupdatear.setNPartidosJugados(numPartidos);
-                        System.out.println("IdEquipo: ");
-                        Integer idEquipo = t.nextInt(); t.nextLine();
-                        if(idEquipo!=null) {
-                            if (GestionEquipos.equipoExists(idEquipo)) {
-                                jugadorAupdatear.setIdEquipo(GestionEquipos.getEquipo(idEquipo));
-                            }
-                        }
-                        //Lo modifico en la BD
-                        if(DAOJugador.updateObjeto(jugadorAupdatear))
-                            System.out.println("Jugador modificado.");
-                    }
-                    else{
-                        System.out.println("No existe un jugador con ese DNI");
-                    }
-                }
-                case 5 -> {
-                    System.out.println("DNI del jugador a borrar:");
-                    String DNI= t.nextLine();
-                    //Si se ha encontrado un jugador con ese DNI, mando el jugador al método y se elimina de la BD
-                    if (GestionJugadores.jugadorExists(DNI)) {
-                        Jugador jugadorAborrar = GestionJugadores.getJugador(DNI);
-                        if(DAOJugador.removeObjeto(jugadorAborrar)) {
-                            GestionJugadores.getListaJugadores().remove(jugadorAborrar);
-                            System.out.println("Jugador eliminado.");
-                        }
-                    }
-                    else
-                        System.out.println("No existe un jugador con ese ID");
-                }
-                case 6 ->{
-                    GestionJugadores.ordenarLista();
-                    for (Jugador jugador : GestionJugadores.getListaJugadores()) {
-                        System.out.println(jugador);
-                    }
-                }
-                case 7 -> {
-                    GestionJugadores.ordenarListaNombre();
-                    for (Jugador jugador : GestionJugadores.getListaJugadores()) {
-                        System.out.println(jugador);
-                    }
-                }
-                case 8 -> {
-                    for (Prestamo prestamo : GestionPrestamo.getListaPrestamos()){
-                        System.out.println(prestamo);
-                    }
-                }
+                case 4 -> menuPrestamo();
                 case 5 -> System.out.println("Volviendo atrás.");
                 default -> System.out.println("Opción errónea, inténtalo de nuevo");
             }
@@ -211,13 +138,50 @@ public class Menu {
                         System.out.println("No existe un libro con ese ISBN.");
                 }
                 case 4 -> {
-
+                    System.out.println("ISBN del libro a modificar:");
+                    String ISBN = t.nextLine();
+                    if (GestionLibro.libroExists(ISBN)){ //Si se ha encontrado un libro con ese ISBN
+                        Libro libroAModificar = GestionLibro.getLibro(ISBN); //Creo un alias para el libro
+                        //pido sus nuevos datos, los modifico en el objeto original con el alias y envío al método update
+                        System.out.println("Introduce los nuevos datos del libro:");
+                        System.out.println("Título: ");
+                        String titulo = t.nextLine();
+                        if(titulo!=null&&!titulo.isEmpty())
+                            libroAModificar.setTitulo(titulo);
+                        System.out.println("Autor: ");
+                        String autor = t.nextLine();
+                        if(autor!=null&&!autor.isEmpty())
+                            libroAModificar.setAutor(autor);
+                        //Lo modifico en la BD
+                        if(DAOLibro.updateObjeto(libroAModificar))
+                            System.out.println("Libro modificado.");
+                    }
+                    else
+                        System.out.println("No existe un libro con ese ISBN.");
                 }
                 case 5 -> {
-
+                    System.out.println("ISBN del libro a eliminar:");
+                    String ISBN = t.nextLine();
+                    if (GestionLibro.libroExists(ISBN)){ //Si se ha encontrado un libro con ese ISBN
+                        Libro libroAEliminar = GestionLibro.getLibro(ISBN); //Creo un alias para el libro
+                        //Lo elimino de la BD y de las listas
+                        if(DAOLibro.removeObjeto(libroAEliminar)) {
+                            System.out.println("Libro eliminado.");
+                            GestionLibro.getListaLibros().remove(libroAEliminar);
+                        }
+                    }
+                    else
+                        System.out.println("No existe un libro con ese ISBN.");
                 }
                 case 6 -> {
-
+                    System.out.println("ISBN del libro a consultar: ");
+                    String ISBN = t.nextLine();
+                    if(GestionLibro.libroExists(ISBN)){
+                        System.out.println("Mostrando los ejemplares disponibles de este libro: ");
+                        for (Ejemplar ejemplar : GestionLibro.getEjemplaresDisponibles(ISBN)){
+                            System.out.println(ejemplar);
+                        }
+                    }
                 }
                 case 7 ->System.out.println("Volviendo atrás...");
                 default -> System.out.println("Opción errónea, inténtalo de nuevo");
@@ -273,10 +237,43 @@ public class Menu {
                         System.out.println("No existe un ejemplar con ese ID.");
                 }
                 case 4 -> {
-
+                    System.out.println("ID del ejemplar a modificar:");
+                    Integer idEjemplar = t.nextInt(); t.nextLine();
+                    if (GestionEjemplar.ejemplarExists(idEjemplar)) { //Si se ha encontrado un ejemplar con ese id
+                        Ejemplar ejemplarAmodificar = GestionEjemplar.getEjemplar(idEjemplar); //Creo un alias para el ejemplar
+                        //pido sus nuevos datos, los modifico en el objeto original con el alias y envío al método update
+                        System.out.println("Introduce los nuevos datos del ejemplar:");
+                        System.out.println("ISBN: ");
+                        String ISBN = t.nextLine();
+                        //Si el libro existe:
+                        if (GestionLibro.libroExists(ISBN)) {
+                            Libro libroOriginal = GestionLibro.getLibro(ISBN);
+                            ejemplarAmodificar.setIsbn(libroOriginal);
+                            System.out.println("Introduce el estado (Disponible/Prestado/Dañado): ");
+                            String estado = t.nextLine();
+                            if (estado != null && !estado.isEmpty())
+                                ejemplarAmodificar.setEstado(estado);
+                            if (DAOEjemplar.updateObjeto(ejemplarAmodificar))
+                                System.out.println("Ejemplar modificado.");
+                        } else
+                            System.out.println("No existe un libro con ese ISBN.");
+                    }
+                    else
+                        System.out.println("No existe un ejemplar con ese ID.");
                 }
                 case 5 -> {
-
+                    System.out.println("ID del ejemplar a eliminar:");
+                    Integer idEjemplar = t.nextInt(); t.nextLine();
+                    if (GestionEjemplar.ejemplarExists(idEjemplar)) { //Si se ha encontrado un ejemplar con ese id
+                        Ejemplar ejemplarAeliminar = GestionEjemplar.getEjemplar(idEjemplar); //Creo un alias para el ejemplar
+                        //Lo elimino de la BD y de las listas
+                        if(DAOEjemplar.removeObjeto(ejemplarAeliminar)) {
+                            System.out.println("Ejemplar eliminado.");
+                            GestionEjemplar.getListaEjemplares().remove(ejemplarAeliminar);
+                        }
+                    }
+                    else
+                        System.out.println("No existe un ejemplar con ese ID.");
                 }
                 case 6 ->System.out.println("Volviendo atrás...");
                 default -> System.out.println("Opción errónea, inténtalo de nuevo");
@@ -340,10 +337,47 @@ public class Menu {
                         System.out.println("No existe un usuario con ese DNI.");
                 }
                 case 4 -> {
-
+                    System.out.println("DNI del usuario a modificar:");
+                    String DNI = t.nextLine();
+                    if (GestionUsuario.usuarioExists(DNI)) { //Si se ha encontrado un usuario con ese dni
+                        Usuario usuarioAmodificar = GestionUsuario.getUsuario(DNI);
+                        System.out.println("Introduce los nuevos datos del usuario:");
+                        System.out.println("Nombre: ");
+                        String nombre = t.nextLine();
+                        if (nombre != null && !nombre.isEmpty())
+                            usuarioAmodificar.setNombre(nombre);
+                        System.out.println("email: ");
+                        String email = t.nextLine();
+                        if (email != null && !email.isEmpty())
+                            usuarioAmodificar.setEmail(email);
+                        System.out.println("Contraseña: ");
+                        String contrasenya = t.nextLine();
+                        if (contrasenya != null && !contrasenya.isEmpty())
+                                usuarioAmodificar.setPassword(contrasenya);
+                        System.out.println("Tipo (normal/administrador): ");
+                        String tipo = t.nextLine();
+                        if (tipo != null && !tipo.isEmpty())
+                            usuarioAmodificar.setTipo(tipo);
+                        //Modificamos en la BD
+                        if (DAOUsuario.updateObjeto(usuarioAmodificar))
+                            System.out.println("Usuario modificado.");
+                    }
+                    else
+                        System.out.println("No existe un usuario con ese DNI.");
                 }
                 case 5 -> {
-
+                    System.out.println("DNI del usuario a eliminar:");
+                    String DNI = t.nextLine();
+                    if (GestionUsuario.usuarioExists(DNI)) { //Si se ha encontrado un usuario con ese dni
+                        Usuario usuarioAmodificar = GestionUsuario.getUsuario(DNI);
+                        //Lo elimino de la BD y de las listas
+                        if(DAOUsuario.removeObjeto(usuarioAmodificar)) {
+                            System.out.println("Usuario eliminado.");
+                            GestionUsuario.getListaUsuarios().remove(usuarioAmodificar);
+                        }
+                    }
+                    else
+                        System.out.println("No existe un usuario con ese DNI.");
                 }
                 case 6 ->System.out.println("Volviendo atrás...");
                 default -> System.out.println("Opción errónea, inténtalo de nuevo");
@@ -402,10 +436,65 @@ public class Menu {
                         System.out.println("No existe un préstamo con ese ID.");
                 }
                 case 4 -> {
-
+                    System.out.println("ID del préstamo a leer: ");
+                    int idPrestamo = t.nextInt(); t.nextLine();
+                    if (GestionPrestamo.prestamoExists(idPrestamo)){
+                        Prestamo prestamoAmodificar = GestionPrestamo.getPrestamo(idPrestamo);
+                        System.out.println("Introduce los nuevos datos del préstamo:");
+                        System.out.println("DNI del usuario: ");
+                        String DNI = t.nextLine();
+                        if(DNI != null && !DNI.isEmpty()) {
+                            //Si el usuario existe:
+                            if (GestionUsuario.usuarioExists(DNI)) {
+                                Usuario usuarioActual = GestionUsuario.getUsuario(DNI);
+                                if (GestionUsuario.prestamoDisponible(usuarioActual))
+                                    prestamoAmodificar.setUsuario(GestionUsuario.getUsuario(DNI));
+                                else {
+                                    if (GestionUsuario.usuarioPenalizado(usuarioActual)) {
+                                        System.out.println(String.format("Este usuario no puede pedir préstamos, penalizado hasta : %s", usuarioActual.getPenalizacionHasta()));
+                                    } else
+                                        System.out.println("Este usuario no puede pedir préstamos, ya tiene 3 activos.");
+                                }
+                            }
+                            else
+                                System.out.println("No existe un usuario con ese DNI.");
+                        }
+                        System.out.println("Introduce el isbn del libro a pedir: ");
+                        String ISBN = t.nextLine();
+                        if (GestionLibro.libroExists(ISBN)) {
+                            if(GestionLibro.ejemplarDisponible(ISBN)) {
+                                //Ponemos como disponible el anterior ejemplar
+                                prestamoAmodificar.getEjemplar().setEstado("Disponible");
+                                //Establecemos a prestado y obtenemos el objeto del nuevo ejemplar
+                                Ejemplar ejemplarApedir = GestionPrestamo.prestarEjemplar(ISBN);
+                                prestamoAmodificar.setEjemplar(ejemplarApedir);
+                            }
+                            else
+                                System.out.println("Ese libro no tiene ejemplares disponibles.");
+                        }
+                        else
+                            System.out.println("No existe un libro con ese ISBN.");
+                        System.out.println("(Las fechas de los préstamos no se pueden modificar)");
+                        //Modificamos en la BD
+                        if (DAOPrestamo.updateObjeto(prestamoAmodificar))
+                            System.out.println("Préstamo modificado.");
+                    }
+                    else
+                        System.out.println("No existe un préstamo con ese ID.");
                 }
                 case 5 -> {
-
+                    System.out.println("ID del préstamo a leer: ");
+                    int idPrestamo = t.nextInt(); t.nextLine();
+                    if (GestionPrestamo.prestamoExists(idPrestamo)){
+                        Prestamo prestamoAmodificar = GestionPrestamo.getPrestamo(idPrestamo);
+                        //Lo elimino de la BD y de las listas
+                        if(DAOPrestamo.removeObjeto(prestamoAmodificar)) {
+                            System.out.println("Préstamo eliminado.");
+                            GestionPrestamo.getListaPrestamos().remove(prestamoAmodificar);
+                        }
+                    }
+                    else
+                        System.out.println("No existe un préstamo con ese ID.");
                 }
                 case 6 -> {
                     System.out.println("Introduce el dni del usuario: ");
@@ -463,7 +552,7 @@ public class Menu {
                         if(GestionLibro.libroExists(isbn)){
                             if(GestionLibro.ejemplarDisponible(isbn)){
                                 Ejemplar ejemplarApedir = GestionPrestamo.prestarEjemplar(isbn);
-                                Prestamo prestamo = new Prestamo(usuarioActual, ejemplarApedir, LocalDate.now());
+                                Prestamo prestamo = new Prestamo(usuarioActual, ejemplarApedir);
                                 DAOPrestamo.addObjeto(prestamo);
                                 GestionPrestamo.getListaPrestamos().add(prestamo);
                                 System.out.println("Se le ha prestado el ejemplar con id: " + ejemplarApedir.getId() +" - NO LO OLVIDE");

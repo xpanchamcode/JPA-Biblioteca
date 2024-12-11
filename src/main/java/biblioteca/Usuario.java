@@ -94,7 +94,8 @@ public class Usuario {
                 this.tipo = tipo;
             }
         }
-        throw new IllegalArgumentException("Tipo de usuario inválido.");
+        else
+            throw new IllegalArgumentException("Tipo de usuario inválido.");
     }
 
     public LocalDate getPenalizacionHasta() {
